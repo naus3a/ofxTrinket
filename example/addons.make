@@ -1,0 +1,2 @@
+ofxHIDapi
+ofxTrinket
