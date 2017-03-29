@@ -1,8 +1,6 @@
 //
 //  ofxTrinket.cpp
 //
-//  magicLab 2017
-//  http://www.magiclab.nyc
 //  Created by enrico<naus3a>viola on 3/9/17.
 //
 //
@@ -53,5 +51,13 @@ void ofxTrinket::send(string msg){
     for(int i=1;i<int(sz);i++){
         data[i] = msg[i+1];
     }
+    hid.sendFeatureReport(data, sz);
+}
+
+void ofxTrinket::send(unsigned char c){
+    size_t sz = 2;
+    unsigned char data[sz];
+    data[0] = 0x00;
+    data[1] = c;
     hid.sendFeatureReport(data, sz);
 }
