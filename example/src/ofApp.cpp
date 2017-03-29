@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+bool b;
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(0);
@@ -7,8 +8,10 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     
     trinket.addDataReceivedCallback(&ofApp::onDataRcv, this);
-    trinket.setReadBufferSize(20);
+    trinket.setReadBufferSize(8);
     trinket.connect();
+    
+    b=false;
 }
 
 void ofApp::onDataRcv(int nBytes){
@@ -18,6 +21,11 @@ void ofApp::onDataRcv(int nBytes){
         msg[i] = trinket.getReadBuffer()[i];
     }
     cout<<"msg: "<<msg<<endl;
+    if(msg[0]=='0'){
+        b=false;
+    }else if(msg[0]=='1'){
+        b=true;
+    }
 }
 
 //--------------------------------------------------------------
@@ -27,16 +35,18 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    if(b){
+        ofClear(255, 0, 0);
+    }else{
+        ofClear(0, 255, 0);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if(key==' '){
-        if(trinket.isDeviceConnected()){
-            cout<<"Sending!"<<endl;
-            trinket.send("b");
-        }
+    if(trinket.isDeviceConnected()){
+        cout<<"Sending "<<(unsigned char)(key)<<endl;
+        trinket.send((unsigned char)(key));
     }
 }
 
